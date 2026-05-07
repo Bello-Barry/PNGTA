@@ -18,7 +18,7 @@ export function LegendeCarte() {
         </div>
 
         <div className="grid grid-cols-1 gap-3">
-          <p className="text-[10px] font-bold text-muted-foreground uppercase">Types d'exploitants</p>
+          <p className="text-[10px] font-bold text-muted-foreground uppercase">Types d&apos;exploitants</p>
 
           <div className="flex items-center justify-between text-[10px] font-medium">
             <div className="flex items-center gap-2">

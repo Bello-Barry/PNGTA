@@ -71,7 +71,7 @@ export function PanneauFiltres({
       <div className="space-y-4">
         <label className="text-xs font-bold text-primary uppercase tracking-wide flex items-center gap-2">
           <UsersIcon size={16} />
-          Type d'Exploitant
+          Type d&apos;Exploitant
         </label>
         <div className="grid grid-cols-3 gap-1">
           {[
