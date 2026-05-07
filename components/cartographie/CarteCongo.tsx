@@ -2,13 +2,15 @@
 
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
-import { DEPARTEMENTS_SVG } from "@/lib/mock-data/carte-congo";
+import { DEPARTEMENTS_SVG, CARTE_VIEWBOX } from "@/lib/mock-data/carte-congo";
 import { ALL_AGRICULTEURS } from "@/lib/mock-data/agriculteurs";
 import { TOP_DEPARTEMENTS_PRODUCTEURS } from "@/lib/mock-data/statistiques";
 import type { Agriculteur } from "@/types";
 
 interface CarteCongoProps {
   filtresCulture: string[];
+  filtreStatut: string;
+  filtreType: "tous" | "individuel" | "cooperative";
   modeAffichage: "heatmap" | "agriculteurs" | "les-deux";
   onSelectDepartement: (dept: string | null) => void;
   onSelectAgriculteur: (agriculteur: Agriculteur | null) => void;
@@ -17,6 +19,8 @@ interface CarteCongoProps {
 
 export function CarteCongo({
   filtresCulture,
+  filtreStatut,
+  filtreType,
   modeAffichage,
   onSelectDepartement,
   onSelectAgriculteur,
@@ -42,17 +46,19 @@ export function CarteCongo({
     if (modeAffichage === "heatmap") return [];
 
     return ALL_AGRICULTEURS
-      .filter((ag) =>
-        filtresCulture.length === 0 ||
-        ag.cultures.some((c) => filtresCulture.includes(c))
-      )
+      .filter((ag) => {
+        const matchCulture = filtresCulture.length === 0 || ag.cultures.some((c) => filtresCulture.includes(c));
+        const matchStatut = filtreStatut === "tous" || ag.statut === filtreStatut;
+        const matchType = filtreType === "tous" || ag.typeExploitant === filtreType;
+        return matchCulture && matchStatut && matchType;
+      })
       .map((ag, index) => {
         const dept = DEPARTEMENTS_SVG.find((d) => d.nom === ag.departement);
         if (!dept) return null;
 
         // Offset déterministe pour ne pas superposer les marqueurs
         const angle = (index * 137.5) % 360;
-        const radius = (index % 5) * 5 + 4;
+        const radius = (index % 5) * 8 + 10;
         const offsetX = Math.cos((angle * Math.PI) / 180) * radius;
         const offsetY = Math.sin((angle * Math.PI) / 180) * radius;
 
@@ -63,22 +69,21 @@ export function CarteCongo({
         };
       })
       .filter((ag): ag is Agriculteur & { x: number; y: number } => ag !== null);
-  }, [filtresCulture, modeAffichage]);
+  }, [filtresCulture, filtreStatut, filtreType, modeAffichage]);
+
+  const COULEUR_STATUT = {
+    actif: "#16A34A",
+    inactif: "#D97706",
+    suspendu: "#DC2626",
+  };
 
   return (
-    <div className="relative w-full aspect-[4/5] bg-blue-50/30 rounded-[2.5rem] border border-border shadow-inner overflow-hidden p-8">
-      <svg viewBox="0 0 400 500" className="w-full h-full drop-shadow-2xl">
-        {/* Ombres des départements */}
-        {DEPARTEMENTS_SVG.map((dept) => (
-          <path
-            key={`shadow-${dept.id}`}
-            d={dept.path}
-            fill="#000000"
-            fillOpacity="0.05"
-            transform="translate(4, 4)"
-          />
-        ))}
-
+    <div className="relative w-full h-full flex items-center justify-center bg-[#EEF4EF] p-4 lg:p-8">
+      <svg
+        viewBox={CARTE_VIEWBOX}
+        className="max-w-full max-h-full drop-shadow-xl"
+        preserveAspectRatio="xMidYMid meet"
+      >
         {/* Départements */}
         {DEPARTEMENTS_SVG.map((dept) => {
           const isSelected = departementSelectionne === dept.nom;
@@ -91,7 +96,7 @@ export function CarteCongo({
               strokeWidth={isSelected ? 3 : 1}
               onClick={(e) => {
                 e.stopPropagation();
-                onSelectDepartement(dept.nom);
+                onSelectDepartement(dept.nom === departementSelectionne ? null : dept.nom);
               }}
               whileHover={{
                 fillOpacity: 0.9,
@@ -106,36 +111,38 @@ export function CarteCongo({
         {/* Marqueurs agriculteurs */}
         {(modeAffichage === "agriculteurs" || modeAffichage === "les-deux") &&
           marqueursAgriculteurs.map((ag) => (
-            <motion.circle
+            <motion.g
               key={ag.id}
-              cx={ag.x}
-              cy={ag.y}
-              r={4}
-              fill={ag.statut === "actif" ? "#16A34A" : ag.statut === "suspendu" ? "#DC2626" : "#D97706"}
-              stroke="#FFFFFF"
-              strokeWidth={1}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              whileHover={{ scale: 1.5, cursor: "pointer" }}
               onClick={(e) => {
                 e.stopPropagation();
                 onSelectAgriculteur(ag);
               }}
-              whileHover={{ r: 7, strokeWidth: 2, cursor: "pointer" }}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{
-                type: "spring",
-                stiffness: 260,
-                damping: 20,
-                delay: Math.random() * 0.3
-              }}
-            />
+            >
+              {ag.typeExploitant === "individuel" ? (
+                <circle
+                  cx={ag.x} cy={ag.y} r={4.5}
+                  fill={COULEUR_STATUT[ag.statut]}
+                  stroke="#FFFFFF" strokeWidth={1}
+                />
+              ) : (
+                <path
+                  d={`M ${ag.x} ${ag.y - 7} L ${ag.x + 7} ${ag.y} L ${ag.x} ${ag.y + 7} L ${ag.x - 7} ${ag.y} Z`}
+                  fill={COULEUR_STATUT[ag.statut]}
+                  stroke="#C9922A" strokeWidth={1.5}
+                />
+              )}
+            </motion.g>
           ))
         }
       </svg>
 
       {/* Overlay info */}
-      <div className="absolute bottom-8 right-8 text-right pointer-events-none">
-        <p className="text-[10px] font-bold text-primary/40 uppercase tracking-[0.2em]">Projection Nationale</p>
-        <p className="text-sm font-serif font-bold text-primary">République du Congo</p>
+      <div className="absolute bottom-4 right-4 lg:bottom-8 lg:right-8 text-right pointer-events-none">
+        <p className="text-[8px] lg:text-[10px] font-bold text-primary/40 uppercase tracking-[0.2em]">Projection Nationale</p>
+        <p className="text-xs lg:text-sm font-serif font-bold text-primary">République du Congo</p>
       </div>
     </div>
   );
