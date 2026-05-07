@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================
+   DESIGN SYSTEM VARIABLES
+   PNGTA GOVERNMENT UI
+========================= */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --border: 214.3 31.8% 91.4%;
+  }
+
+  body {
+    @apply font-sans bg-surface text-text-primary;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-bold;
+  }
+}
+
+/* =========================
+   COMPONENTS SYSTEM
+========================= */
+@layer components {
+
+  /* === BUTTONS === */
+  .btn-primary {
+    @apply px-4 py-2 rounded-lg bg-primary text-white font-medium hover:bg-primary-light transition-colors;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 rounded-lg bg-white text-primary border border-primary font-medium hover:bg-surface transition-colors;
+  }
+
+  /* === CARD (FIXED bg-card ERROR) === */
+  .card {
+    @apply bg-card text-card-foreground rounded-xl shadow-sm border border-border p-6;
+  }
+
+  /* === PAGE WRAPPER === */
+  .page-container {
+    @apply max-w-7xl mx-auto px-4 py-8;
+  }
+
+  /* === BADGES === */
+  .badge {
+    @apply inline-block px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .badge-success {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .badge-warning {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-danger {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .badge-info {
+    @apply bg-blue-100 text-blue-800;
+  }
+}
