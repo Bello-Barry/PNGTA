@@ -2,7 +2,7 @@
 
 import { AppShell } from "@/components/layout/AppShell";
 import {
-  STATISTIQUES_MENSUELLES,
+
   PRODUCTION_PAR_CULTURE,
   REVENUS_PAR_DEPARTEMENT,
   COMPARAISON_EXPORT_IMPORT_MENSUEL,
@@ -167,7 +167,7 @@ export default function Analytique() {
                       dataKey="production"
                       nameKey="culture"
                     >
-                      {PRODUCTION_PAR_CULTURE.map((entry, index) => (
+                      {PRODUCTION_PAR_CULTURE.map((_, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>

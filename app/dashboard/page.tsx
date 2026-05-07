@@ -8,12 +8,12 @@ import {
   TrendingUp, 
   DollarSign, 
   AlertCircle,
-  BarChart3,
+
   Circle
 } from "lucide-react";
 import {
   KPI_DASHBOARD,
-  PRODUCTION_PAR_CULTURE,
+
   TOP_DEPARTEMENTS_PRODUCTEURS,
   CARGAISONS_MOCK,
   getAlertesActives,
@@ -21,7 +21,6 @@ import {
 import { motion } from "framer-motion";
 import { ProductionChart } from "@/components/dashboard/ProductionChart";
 import { CarteOverview } from "@/components/dashboard/CarteOverview";
-import { useMockRealtime } from "@/hooks/useMockRealtime";
 import { useState, useEffect } from "react";
 
 const container = {
