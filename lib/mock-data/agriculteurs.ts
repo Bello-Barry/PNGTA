@@ -1,5 +1,5 @@
 import { Agriculteur } from "@/types";
-import { DEPARTEMENTS, NOMS_AGRICULTEURS, CULTURES_PRINCIPALES } from "./geo";
+import { DEPARTEMENTS, NOMS_AGRICULTEURS, CULTURES_PRINCIPALES, DISTRICTS_PAR_DEPARTEMENT } from "./geo";
 
 function generateNGA(index: number): string {
   return `NGA-2024-${String(index + 1).padStart(6, "0")}`;
@@ -183,9 +183,7 @@ function generateAdditionalAgriculteurs(): Agriculteur[] {
       nom: nom,
       departement: dept,
       district: getRandomItem(
-        Object.values(
-          require("./geo").DISTRICTS_PAR_DEPARTEMENT
-        )[dept] || ["District"]
+        DISTRICTS_PAR_DEPARTEMENT[dept as keyof typeof DISTRICTS_PAR_DEPARTEMENT] ?? ["District Central"]
       ),
       village: `Village ${i}`,
       cultures: getRandomCultures(),

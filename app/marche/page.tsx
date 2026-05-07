@@ -4,7 +4,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { PRODUITS_MARCHE_MOCK, getTopVendeurs } from "@/lib/mock-data";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { ShoppingCart, TrendingUp, TrendingDown, Search, Filter } from "lucide-react";
+import { TrendingUp, Search, Filter } from "lucide-react";
 import { PrixTicker } from "@/components/marche/PrixTicker";
 import { ProduitCard } from "@/components/marche/ProduitCard";
 

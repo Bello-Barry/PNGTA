@@ -1,6 +1,5 @@
 "use client";
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { getAlertesActives } from "@/lib/mock-data";
 import { AlertTriangle, AlertCircle, TrendingDown } from "lucide-react";
 

@@ -10,14 +10,11 @@ export default function Mobile() {
   const [screen, setScreen] = useState<Screen>("menu");
   const [selectedCulture, setSelectedCulture] = useState("");
   const [quantite, setQuantite] = useState("");
-  const [district, setDistrict] = useState("Kinkala");
-  const [isSyncing, setIsSyncing] = useState(false);
+  const [district] = useState("Kinkala");
 
   // Simulation de synchronisation
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsSyncing(true);
-      setTimeout(() => setIsSyncing(false), 2500);
     }, 15000);
     return () => clearInterval(interval);
   }, []);

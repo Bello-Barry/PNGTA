@@ -16,8 +16,6 @@ export default function ExportImport() {
   const [typeFilter, setTypeFilter] = useState<"all" | "export" | "import">("all");
   const [statutFilter, setStatutFilter] = useState("all");
 
-  const exportsCount = CARGAISONS_MOCK.filter((c) => c.type === "export").length;
-  const importsCount = CARGAISONS_MOCK.filter((c) => c.type === "import").length;
   const totalValeurExports = getTotalValeurExports();
   const totalValeurImports = getTotalValeurImports();
 

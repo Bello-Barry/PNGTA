@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Download, TrendingUp, TrendingDown, DollarSign, Activity } from "lucide-react";
 import { STATISTIQUES_MENSUELLES } from "@/lib/mock-data/statistiques";
 
