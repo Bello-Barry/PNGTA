@@ -32,7 +32,7 @@ export function Header() {
                   République du Congo
                 </p>
                 <p className="text-sm font-bold text-primary">
-                  Ministère de l'Agriculture
+                  Ministère de l&apos;Agriculture
                 </p>
               </div>
             </div>

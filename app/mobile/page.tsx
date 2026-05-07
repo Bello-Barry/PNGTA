@@ -340,7 +340,7 @@ export default function Mobile() {
 
       {/* Footer */}
       <div className="bg-sidebar text-white text-center py-3 text-xs border-t border-gray-300">
-        PNGTA © 2024 | Ministère de l'Agriculture — République du Congo
+        PNGTA © 2024 | Ministère de l&apos;Agriculture — République du Congo
       </div>
     </div>
   );

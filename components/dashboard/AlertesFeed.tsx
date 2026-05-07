@@ -31,7 +31,7 @@ export function AlertesFeed() {
 
   return (
     <div className="card">
-      <h2 className="text-lg font-serif font-bold mb-4">Flux d'alertes actives</h2>
+      <h2 className="text-lg font-serif font-bold mb-4">Flux d&apos;alertes actives</h2>
       <div className="space-y-3 max-h-96 overflow-y-auto">
         {alertes.map((alerte) => (
           <div

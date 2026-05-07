@@ -223,8 +223,8 @@ export default function AgriculteurDetail() {
               </div>
               
               <p className="text-xs text-text-muted mt-6 italic">
-                Ce QR code permet la vérification instantanée de l'authenticité de l'agriculteur et de la 
-                traçabilité de ses produits par les agents du Ministère de l'Agriculture et de l'Élevage.
+                Ce QR code permet la vérification instantanée de l&apos;authenticité de l&apos;agriculteur et de la 
+                traçabilité de ses produits par les agents du Ministère de l&apos;Agriculture et de l&apos;Élevage.
               </p>
             </div>
           </div>
