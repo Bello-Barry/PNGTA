@@ -2,8 +2,9 @@
 
 import React from "react";
 import { Agriculteur } from "@/types";
-import { ArrowLeft, MapPin, Wheat, Scale, Phone, Mail, FileText } from "lucide-react";
+import { ArrowLeft, MapPin, Wheat, Scale, Phone, Mail, FileText, Users, User, Shield, CheckCircle, Clock } from "lucide-react";
 import { QrCodeBadge } from "@/components/agriculteurs/QrCodeBadge";
+import { cn } from "@/lib/utils";
 
 interface PanneauDetailAgriculteurProps {
   agriculteur: Agriculteur;
@@ -12,7 +13,7 @@ interface PanneauDetailAgriculteurProps {
 
 export function PanneauDetailAgriculteur({ agriculteur, onBack }: PanneauDetailAgriculteurProps) {
   return (
-    <div className="flex flex-col h-full space-y-6 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300">
+    <div className="flex flex-col h-full space-y-6 overflow-y-auto p-4 lg:p-6 bg-white">
       <button
         onClick={onBack}
         className="flex items-center gap-2 text-primary font-bold text-sm hover:translate-x-[-4px] transition-transform w-fit"
@@ -21,25 +22,75 @@ export function PanneauDetailAgriculteur({ agriculteur, onBack }: PanneauDetailA
         Retour au département
       </button>
 
+      {/* Type d'exploitant Badge */}
+      {agriculteur.typeExploitant === "cooperative" ? (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
+          <div className="flex items-center gap-2 mb-1">
+            <Users className="w-4 h-4 text-amber-600" />
+            <span className="text-[10px] font-bold text-amber-700 uppercase">Coopérative</span>
+          </div>
+          <p className="text-sm font-semibold">{agriculteur.nomCooperative}</p>
+          <p className="text-xs text-muted-foreground">{agriculteur.nombreMembres} membres</p>
+          {agriculteur.capaciteStockage && (
+            <p className="text-xs text-muted-foreground">
+              Stockage : {agriculteur.capaciteStockage} tonnes
+            </p>
+          )}
+        </div>
+      ) : (
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3">
+          <div className="flex items-center gap-2">
+            <User className="w-4 h-4 text-green-600" />
+            <span className="text-[10px] font-bold text-green-700 uppercase">Exploitant Individuel</span>
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">
+            Non affilié à une coopérative
+          </p>
+        </div>
+      )}
+
       <div className="flex flex-col items-center text-center p-6 bg-white border border-border rounded-3xl shadow-sm">
-        <div className={`w-24 h-24 rounded-full flex items-center justify-center text-4xl font-serif font-bold text-white mb-4 shadow-lg ${
+        <div className={cn(
+          "w-20 h-20 rounded-full flex items-center justify-center text-3xl font-serif font-bold text-white mb-4 shadow-lg",
           agriculteur.statut === "actif" ? "bg-green-500 shadow-green-100" : agriculteur.statut === "suspendu" ? "bg-red-500 shadow-red-100" : "bg-amber-500 shadow-amber-100"
-        }`}>
+        )}>
           {agriculteur.nom.charAt(0)}
         </div>
-        <h2 className="text-2xl font-serif font-bold text-primary mb-1">{agriculteur.nom}</h2>
-        <p className="font-mono text-sm font-bold text-primary-light bg-primary/5 px-3 py-1 rounded-full border border-primary/10">
+        <h2 className="text-xl font-serif font-bold text-primary mb-1">{agriculteur.nom}</h2>
+        <p className="font-mono text-[10px] font-bold text-primary-light bg-primary/5 px-3 py-1 rounded-full border border-primary/10">
           {agriculteur.numeroNational}
         </p>
-        <div className={`mt-4 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest ${
+        <div className={cn(
+          "mt-4 px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest",
           agriculteur.statut === "actif" ? "bg-green-100 text-green-700" : agriculteur.statut === "suspendu" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"
-        }`}>
+        )}>
           {agriculteur.statut}
         </div>
       </div>
 
+      {/* Chef de Secteur responsable */}
+      <div className="flex items-start gap-3 py-4 border-t border-border">
+        <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+        <div>
+          <p className="text-[10px] text-muted-foreground font-bold uppercase">Chef de Secteur</p>
+          <p className="text-sm font-medium">{agriculteur.chefSecteurResponsable}</p>
+          <span className={cn(
+            "inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full mt-2 font-bold",
+            agriculteur.statutValidation === "valide"
+              ? "bg-green-100 text-green-700"
+              : "bg-amber-100 text-amber-700"
+          )}>
+            {agriculteur.statutValidation === "valide" ? (
+              <><CheckCircle className="w-3 h-3" /> Validé le {agriculteur.dateValidation}</>
+            ) : (
+              <><Clock className="w-3 h-3" /> En attente de validation</>
+            )}
+          </span>
+        </div>
+      </div>
+
       <div className="space-y-4">
-        <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest px-1">Informations Géographiques</h3>
+        <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest">Localisation</h3>
         <div className="p-4 bg-white border border-border rounded-2xl space-y-4">
           <InfoRow icon={<MapPin size={16} />} label="Département" value={agriculteur.departement} />
           <div className="h-px bg-gray-50" />
@@ -50,7 +101,7 @@ export function PanneauDetailAgriculteur({ agriculteur, onBack }: PanneauDetailA
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest px-1">Exploitation</h3>
+        <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest">Exploitation</h3>
         <div className="grid grid-cols-2 gap-4">
           <div className="p-4 bg-white border border-border rounded-2xl text-center">
             <Scale className="mx-auto text-primary mb-2" size={20} />
@@ -67,7 +118,7 @@ export function PanneauDetailAgriculteur({ agriculteur, onBack }: PanneauDetailA
           <p className="text-[10px] text-text-muted uppercase font-bold mb-3">Cultures</p>
           <div className="flex flex-wrap gap-2">
             {agriculteur.cultures.map((c, idx) => (
-              <span key={idx} className="px-3 py-1 bg-surface border border-border rounded-full text-xs font-medium text-primary">
+              <span key={idx} className="px-3 py-1 bg-surface border border-border rounded-full text-[10px] font-bold text-primary">
                 {c}
               </span>
             ))}
@@ -76,7 +127,7 @@ export function PanneauDetailAgriculteur({ agriculteur, onBack }: PanneauDetailA
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest px-1">Contact</h3>
+        <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest">Contact</h3>
         <div className="p-4 bg-white border border-border rounded-2xl space-y-4">
           <InfoRow icon={<Phone size={16} />} label="Téléphone" value={agriculteur.telephone || "N/A"} />
           <div className="h-px bg-gray-50" />
@@ -85,7 +136,7 @@ export function PanneauDetailAgriculteur({ agriculteur, onBack }: PanneauDetailA
       </div>
 
       <div className="flex justify-center pt-4">
-        <QrCodeBadge value={agriculteur.numeroNational} size={150} />
+        <QrCodeBadge value={agriculteur.numeroNational} size={120} />
       </div>
 
       <div className="pt-4 pb-8">

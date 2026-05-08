@@ -1,16 +1,38 @@
+// Ajouter ces types
+export type TypeExploitant = "individuel" | "cooperative";
+
+export type RoleUtilisateur =
+  | "ministere"
+  | "chef_secteur"      // ← NOUVEAU rôle collecteur terrain
+  | "administrateur"
+  | "agriculteur"
+  | "exportateur"
+  | "acheteur";
+
 // Agriculteur types
 export interface Agriculteur {
   id: string;
-  numeroNational: string;
+  numeroNational: string;           // NGA-2024-XXXXXX
   nom: string;
+  typeExploitant: TypeExploitant;   // ← NOUVEAU CHAMP
+  nomCooperative?: string;          // ← Si cooperative : nom du groupement
+  nombreMembres?: number;           // ← Si cooperative : nombre de membres
+  chefSecteurResponsable: string;   // ← NOUVEAU : nom du chef de secteur
+  statutValidation: "valide" | "en_attente" | "a_verifier"; // ← NOUVEAU
   departement: string;
   district: string;
-  village?: string;
+  village: string;
+  coordonneesGPS?: {                // ← NOUVEAU : GPS réel
+    latitude: number;
+    longitude: number;
+  };
   cultures: string[];
   surfaceHectares: number;
   productionAnnuelleEstimee: number;
+  capaciteStockage?: number;        // ← Pour les coopératives (tonnes)
   statut: "actif" | "inactif" | "suspendu";
   dateEnregistrement: string;
+  dateValidation?: string;          // ← Date de validation par chef de secteur
   email?: string;
   telephone?: string;
   avatar?: string;
@@ -43,7 +65,7 @@ export interface Cargaison {
   statut: "en_preparation" | "en_transit" | "dedouane" | "livre" | "bloque";
   datePrevu: string;
   dateRelle?: string;
-  valeur: number; // FCFA
+  valeur: number; // FCFA;
 }
 
 // Alerte
